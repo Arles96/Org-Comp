@@ -161,7 +161,7 @@ public class Simulador {
     
     //Metodos administrativos
     
-    public void iniciarCache(){
+    public void cargar_cache(){
         for (int i = 0; i < memoriaCache.length; i++) {
             for (int j = 0; j < memoriaCache[i].length; j++) {
                 memoriaCache[i][j] = NULL;
@@ -170,7 +170,7 @@ public class Simulador {
     }
     
 
-    public void vaciarCacheEnRam() {
+    public void vaciar_cache_ram() {
         for (int i = 0; i < memoriaCache.length; i++) {
             if (memoriaCache[i][1] != NULL) {
                 int linea = memoriaCache[i][1] * bloque;
@@ -182,12 +182,12 @@ public class Simulador {
         }
     }
 
-    public int leerSinCache(int direccion) {
+    public int lsinCache(int direccion) {
         tiempo += 0.1;
         return arreglo_ram[direccion];
     }
 
-    public void escribirSinCache(int direccion, int valor) {
+    public void esinCache(int direccion, int valor) {
         try {
 
             arreglo_ram[direccion] = valor;
@@ -198,7 +198,7 @@ public class Simulador {
 
     }
 
-    public void ordenarNumeros(int tipo, int n) {
+    public void ordenar(int tipo, int n) {
         int b, a;
         int cambios = 1;
         int limites = n - 1;
@@ -221,7 +221,7 @@ public class Simulador {
 
     }
 
-    public int leerDirecto(int direccion) {
+    public int lDirecto(int direccion) {
         int bloque = direccion / this.bloque;
         int linea = bloque % lineas_cache;
         int palabra = direccion % this.bloque;
@@ -281,7 +281,7 @@ public class Simulador {
 
     }
 
-    public int escribirDirecto(int direccion, int valor) {
+    public int eDirecto(int direccion, int valor) {
 
         int bloque = direccion / this.bloque;
         int linea = bloque % lineas_cache;
@@ -347,7 +347,7 @@ public class Simulador {
 
     }
 
-    public void cargarRam() {
+    public void cargarArrayRam() {
         File f = new File("datos.txt");
         FileReader fr = null;
         BufferedReader br = null;
@@ -367,13 +367,13 @@ public class Simulador {
         //System.out.println("Leer");
         switch (tipo) {
             case 0:
-                return leerSinCache(direccion);
+                return lsinCache(direccion);
             case 1:
-                return leerDirecto(direccion);
+                return lDirecto(direccion);
             case 3:
-                return leerAsociativaConjunto(direccion);
+                return lAsociativaConjunto(direccion);
             case 2:
-                return leerAsociativa(direccion);
+                return lAsociativa(direccion);
             default:
                 return 0;
         }
@@ -382,77 +382,39 @@ public class Simulador {
     public void escribir(int posicion, int tipo, int valor) {
         switch (tipo) {
             case 0:
-                escribirSinCache(posicion, valor);
+                esinCache(posicion, valor);
                 break;
             case 1:
-                escribirDirecto(posicion, valor);
+                eDirecto(posicion, valor);
                 break;
             case 3:
-                escribirAsociativaConjunto(posicion, valor);
+                eAsociativoConjunto(posicion, valor);
                 break;
             case 2:
-                escribirAsociativa(posicion, valor);
+                eAsociativa(posicion, valor);
                 break;
             default:
                 break;
         }
     }
 
-    public void prueba(int tipo) {
-        escribir(100, tipo, 10);    //0.11
-        escribir(101, tipo, 13);    //0.01
-        escribir(102, tipo, 21);    //0.01
-        escribir(103, tipo, 11);    //0.01
-        escribir(104, tipo, 67);    //0.01
-        escribir(105, tipo, 43);    //0.01
-        escribir(106, tipo, 9);     //0.01
-        escribir(107, tipo, 11);    //0.01
-        escribir(108, tipo, 19);    //0.01
-        escribir(109, tipo, 23);    //0.01
-        escribir(110, tipo, 32);    //0.01
-        escribir(111, tipo, 54);    //0.01
-        escribir(112, tipo, 98);    //0.11
-        escribir(113, tipo, 7);     //0.01
-        escribir(114, tipo, 13);    //0.01
-        escribir(115, tipo, 1);     //0.01
-
-        int menor = leer(100, tipo);//0.11 
-        int mayor = menor;
-        int a = 0;
-        int me = 600;
-        for (int i = 101; i <= 115; i++) {
-            a++;
-            escribir(me, tipo, a);//0.11
-            if (leer(i, tipo) < menor) {//0.01
-                menor = leer(i, tipo);
-            }
-            if (leer(i, tipo) > mayor) {//0.01
-                mayor = leer(i, tipo);
-            }
-            me += 10;
-        }
-        System.out.println("Mayor");
-        System.out.println(mayor);
-
-    }
-
-    public void iniciarPunteros() {
+    public void inicioPuntero() {
         for (int i = 0; i < punteros.length; i++) {
             punteros[i] = i * lineas_conjunto;
         }
 
     }
 
-    public int leerAsociativaConjunto(int direccion) {
+    public int lAsociativaConjunto(int direccion) {
         int bloque = direccion / this.bloque;
         int conjunto = bloque % cantidad_conjunto;
         int palabra = direccion % this.bloque;
         //buscamos la linea asignada para esa direccion si no esta devuelve la primera
-        int linea = lineaCache(bloque, conjunto);
+        int linea = linea_cache(bloque, conjunto);
 
         if (memoriaCache[linea][0] == 1) {
             //Esta en cahce
-            if (estaEnCache(bloque, conjunto)) {
+            if (estar_cache(bloque, conjunto)) {
                 tiempo += 0.01;
                 return memoriaCache[linea][palabra + 3];
             } else if (memoriaCache[linea][2] == 1) {
@@ -519,16 +481,16 @@ public class Simulador {
 
     }
 
-    public int escribirAsociativaConjunto(int direccion, int valor) {
+    public int eAsociativoConjunto(int direccion, int valor) {
         int bloque = direccion / this.bloque;
         int conjunto = bloque % cantidad_conjunto;
         int palabra = direccion % this.bloque;
         //buscamos la linea asignada para esa direccion si no esta devuelve la primera
-        int linea = lineaCache(bloque, conjunto);
+        int linea = linea_cache(bloque, conjunto);
 
         if (memoriaCache[linea][0] == 1) {
             //Esta en cahce
-            if (estaEnCache(bloque, conjunto)) {
+            if (estar_cache(bloque, conjunto)) {
                 tiempo += 0.01;
                 memoriaCache[linea][palabra + 3] = valor;
                 return memoriaCache[linea][palabra + 3];
@@ -599,7 +561,7 @@ public class Simulador {
 
     }
 
-    public int lineaCache(int bloque, int conjunto) {
+    public int linea_cache(int bloque, int conjunto) {
         int lineaCont = conjunto * lineas_conjunto;
         for (int i = 0; i < lineas_conjunto; i++) {
             if (bloque == memoriaCache[lineaCont][1]) {
@@ -610,7 +572,7 @@ public class Simulador {
         return punteros[conjunto];
     }
 
-    public boolean estaEnCache(int bloque, int conjunto) {
+    public boolean estar_cache(int bloque, int conjunto) {
         int lineaCont = conjunto * lineas_conjunto;
         for (int i = 0; i < lineas_conjunto; i++) {
             if (bloque == memoriaCache[lineaCont][1]) {
@@ -621,9 +583,9 @@ public class Simulador {
         return false;
     }
 
-    public int leerAsociativa(int direccion) {
+    public int lAsociativa(int direccion) {
         int bloque = direccion / this.bloque;
-        int linea = lineaCacheAsociativa(bloque);
+        int linea = lineacAsociativa(bloque);
         int palabra = direccion % this.bloque;
         if (memoriaCache[linea][0] == 1) {
             if (memoriaCache[linea][1] == bloque) {
@@ -687,9 +649,9 @@ public class Simulador {
 
     }
 
-    public int escribirAsociativa(int direccion, int valor) {
+    public int eAsociativa(int direccion, int valor) {
         int bloque = direccion / this.bloque;
-        int linea = lineaCacheAsociativa(bloque);
+        int linea = lineacAsociativa(bloque);
         int palabra = direccion % this.bloque;
         if (memoriaCache[linea][0] == 1) {
             if (memoriaCache[linea][1] == bloque) {
@@ -758,7 +720,7 @@ public class Simulador {
 
     }
 
-    public boolean estaCacheAsociativa(int bloque) {
+    public boolean estar_cacheAsociativa(int bloque) {
         for (int i = 0; i < lineas_cache; i++) {
             if (memoriaCache[i][1] == bloque) {
                 return true;
@@ -766,7 +728,7 @@ public class Simulador {
         }
         return false;
     }
-    public int lineaCacheAsociativa(int bloque) {
+    public int lineacAsociativa(int bloque) {
         for (int i = 0; i < lineas_cache; i++) {
             if (memoriaCache[i][1] == bloque) {
                 return i;

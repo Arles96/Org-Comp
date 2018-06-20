@@ -87,9 +87,9 @@ public class GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void ejecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ejecutarActionPerformed
-        simulador.iniciarPunteros();
-        simulador.cargarRam();
-        simulador.iniciarCache();
+        simulador.inicioPuntero();
+        simulador.cargarArrayRam();
+        simulador.cargar_cache();
         String resultado = "Metodo\t\t Tiempo\n\n";
         int n;
         try {
@@ -101,38 +101,38 @@ public class GUI extends javax.swing.JFrame {
         simulador.setTiempo(0);
         DecimalFormat df = new DecimalFormat("#.00");
         if (jcTipo.getSelectedIndex()==0){
-            simulador.ordenarNumeros(jcTipo.getSelectedIndex(), n);
+            simulador.ordenar(jcTipo.getSelectedIndex(), n);
             resultado += "Sin Cache\t\t" + df.format(simulador.getTiempo());
         }
         else if (jcTipo.getSelectedIndex()==1){
-            simulador.ordenarNumeros(jcTipo.getSelectedIndex(), n);
+            simulador.ordenar(jcTipo.getSelectedIndex(), n);
             resultado += "Cache Directo\t\t" + df.format(simulador.getTiempo());
         }
         else if (jcTipo.getSelectedIndex()==2){
-            simulador.ordenarNumeros(jcTipo.getSelectedIndex(), n);
+            simulador.ordenar(jcTipo.getSelectedIndex(), n);
             resultado += "Asociativo\t\t" + df.format(simulador.getTiempo());
         }
         else if (jcTipo.getSelectedIndex()==3){
-            simulador.ordenarNumeros(jcTipo.getSelectedIndex(), n);
+            simulador.ordenar(jcTipo.getSelectedIndex(), n);
             resultado += "Asociativo por conjuntos\t\t" + df.format(simulador.getTiempo());
         }
         else {
-            simulador.ordenarNumeros(0, n);
+            simulador.ordenar(0, n);
             resultado += "Sin Cache\t\t" + df.format(simulador.getTiempo()) + "\n\n";
             simulador.setTiempo(0);
-            simulador.iniciarCache();
-            simulador.cargarRam();            
-            simulador.ordenarNumeros(1, n);
+            simulador.cargar_cache();
+            simulador.cargarArrayRam();            
+            simulador.ordenar(1, n);
             resultado += "Cache Directo\t\t" + df.format(simulador.getTiempo()) + "\n\n";
-            simulador.iniciarCache();
-            simulador.cargarRam(); 
+            simulador.cargar_cache();
+            simulador.cargarArrayRam(); 
             simulador.setTiempo(0);
-            simulador.ordenarNumeros(2, n);
+            simulador.ordenar(2, n);
             resultado += "Asociativo\t\t" + df.format(simulador.getTiempo()) + "\n\n";
-            simulador.iniciarCache();
-            simulador.cargarRam(); 
+            simulador.cargar_cache();
+            simulador.cargarArrayRam(); 
             simulador.setTiempo(0);
-            simulador.ordenarNumeros(3, n);
+            simulador.ordenar(3, n);
             resultado += "Asociativo por conjuntos\t" + df.format(simulador.getTiempo()) + "\n\n";
         }
         textResultado.setText(resultado);
